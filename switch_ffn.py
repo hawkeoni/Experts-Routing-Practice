@@ -143,4 +143,4 @@ if __name__ == "__main__":
         if epoch % 1000 == 0:
             print(f"Epoch {epoch}, loss: {loss.item()}")
 
-    assert (args.dry_run or router_pre != ffn.router.weight).all(), "Gradients did not flow through router!"
+    assert (args.dry_run or (router_pre != ffn.router.weight).all()), "Gradients did not flow through router!"
