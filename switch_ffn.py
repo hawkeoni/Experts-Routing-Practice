@@ -23,7 +23,7 @@ class SwitchFFNSimplified(nn.Module):
         self.drop_tokens = drop_tokens
         self.is_scale_prob = is_scale_prob
         self.experts = nn.ModuleList([Expert(d_model, 2) for _ in range(n_experts)])
-        self.router = nn.Linear(d_model, n_experts)
+        self.router = nn.Linear(d_model, n_experts, False)
         self.dry_run = dry_run
 
     def forward(self, x):
@@ -106,7 +106,7 @@ if __name__ == "__main__":
         Loss should always be 0, because we do not apply experts. This option disables 
         loss calculation and allows us to check the validity of our tensor gathering/scattering code.""",
     )
-    parser.add_argument("--seq-len", type=int, default=2)
+    parser.add_argument("--seq-len", type=int, default=5)
     parser.add_argument("--n-experts", type=int, default=11)
     parser.add_argument("--scale-prob", action="store_true", default=False)
     parser.add_argument("--model", type=str, choices=["simplified", "labml"], default="simplified")
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     batch_size = 3
     seq_len = args.seq_len
-    d_model = 3
+    d_model = 17
     n_experts = args.n_experts
     if args.model == "simplified":
         ffn = SwitchFFNSimplified(n_experts, d_model, args.capacity, True, args.scale_prob, args.dry_run)
